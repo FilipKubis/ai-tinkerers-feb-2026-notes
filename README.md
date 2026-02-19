@@ -1,26 +1,17 @@
-# What if your AI assistant remembered everything you did on your computer?
+# What if your AI assistants remembered everything you did on your computer?
 
----
 
-# Let me show you.
-
-> *"What have I been working on in the last few hours?"*
-
-Live demo — Claude Desktop + MemoryLane MCP
-
----
-
-# What just happened?
+## How does it work?
 
 ```
-Periodic screenshots (1/sec)
-    → Vision model extraction
-        → Local vector storage (SQLite + LanceDB)
+Periodic screenshots (smart activity based capture)
+    → Vision model extracts information about your activity
+        → Local storage with vector embeddings (SQLite)
             → MCP server
-                → Claude answers your question
+                → Claude can access information about your activity
 ```
 
-Everything runs locally. Nothing leaves your machine.
+Everything runs locally - besides the vision model where you can point to any endponit (including local private model).
 
 ---
 
