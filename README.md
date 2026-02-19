@@ -47,13 +47,13 @@ Output tokens are quite expensive.
 
 ### Lessons with Input tokens:
 
-| Model | Tokens / large image | Tokens / small image | Tokens / sec of video | Cost / 1M input tokens | Cost / 1h video input |
-|---|---|---|---|---|---|
-| Gemini 2.5 Flash Lite | 3,360 | 1,812 | ~258 | $0.10 | ~$0.09 |
-| Gemini 2.5 Flash | 3,360 | 1,812 | ~258 | $0.30 | ~$0.28 |
-| Gemini 3 Flash Preview | 1,072 | 1,110 | ~64 | $0.50 | ~$0.12 |
-| Gemini 3 Pro Preview | 1,072 | 1,110 | ~64 | $2.00 | ~$0.46 |
-| Mistral Small 3.2 24B | 2,025 | 1,633 | N/A | $0.10 | N/A |
+| Model | Tokens / large image | Tokens / small image | Tokens / sec of video | Cost / 1M input tokens | Cost / 1h video input | Cost / 250h video input |
+|---|---|---|---|---|---|---|
+| Gemini 2.5 Flash Lite | 3,360 | 1,812 | ~258 | $0.10 | ~$0.09 | ~$23 |
+| Gemini 2.5 Flash | 3,360 | 1,812 | ~258 | $0.30 | ~$0.28 | ~$70 |
+| Gemini 3 Flash Preview | 1,072 | 1,110 | ~64 | $0.50 | ~$0.12 | ~$29 |
+| Gemini 3 Pro Preview | 1,072 | 1,110 | ~64 | $2.00 | ~$0.46 | ~$115 |
+| Mistral Small 3.2 24B | 2,025 | 1,633 | N/A | $0.10 | N/A | N/A |
 
 
 Understand your models' tokenizers!
