@@ -149,7 +149,7 @@ Name your tools clearly. Split by intent, not by data model. Make the common cas
 
 # It's open source — scan to star
 
-![QR Code](memorylane-repo-qr.png)
+<img src="memorylane-repo-qr.png" alt="QR Code" width="200">
 
 **[github.com/deusXmachina-dev/memorylane](https://github.com/deusXmachina-dev/memorylane)**
 
