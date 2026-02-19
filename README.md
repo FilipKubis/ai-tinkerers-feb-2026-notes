@@ -15,7 +15,7 @@ Everything runs locally - besides the vision model where you can point to any en
 
 ---
 
-# The hard parts of building this
+## The hard parts of building this
 
 1. Efficient use of tokens
 2. Making the extracted data useful for the user
@@ -29,87 +29,46 @@ Other challenges which I won't focus on but happy to discuss in person
 
 ---
 
-# Part 1: Token efficiency
+## Part 1: Token efficiency
+
+### The goal
+
+Extract meaningful information about the users activity.
+
+### The problem
+
+We're processing hundreds of screenshots per hour through vision models - this can get expensive.
+
+We want to provide as **much information** as possible in as **few input tokens** as possible.
+
+Output tokens are quite expensive.
 
 ---
 
-# The problem
+### Lessons with Input tokens:
 
-We're processing hundreds of screenshots per hour through vision models.
+Todo: token per image and per minute of video by model
 
-Two things drive cost:
-- **Input tokens** — how you encode what happened on screen
-- **Output tokens** — what you ask the model to produce
 
----
-
-# Input tokens: video turns out to be the best encoding
-
-| | 10 individual images | 10s video (1fps) |
-|---|---|---|
-| Tokens | ~2,580 | ~2,580 |
-| Payload | ~500KB–1MB | ~100–300KB |
-| Temporal context | none | model sees transitions |
-
-Same token cost. Smaller payload. And the model actually understands what's happening over time.
+Understand your models' tokenizers.
+Video is incredibly token-efficient representation of "activity" (LLMs usualy sample 1FPS and understand temporal dependencies incredibly well).
 
 ---
 
-# Not all models are equal
+### Lessons with Output tokens:
 
-| Model | Cost / 5 min video |
-|---|---|
-| Gemini 2.5 Flash | ~$0.001 |
-| Gemini 3 Flash | ~$0.0008 (variable seq length) |
-| GPT-4.1 | ~$0.46 |
-| GPT-4.1 mini | ~$0.002 |
+Usually cost 3–8x more than input tokens.
 
-Gemini's native video tokenization makes it about 400x cheaper than GPT-4.1 for this use case.
+Our approach: don't ask the LLM to do what a free API can do. The LLM handles *understanding*. OCR handles *raw recall*.
 
----
+**High Level:**
+LLMs output activity summary - the narrative of what happened at ~$0.0001
 
-# Output tokens: this is where it gets expensive
+**Detail:**
+Native OCR extracts text which can be used for perfect recall of the LLM.
 
-Output tokens cost 4–8x more than input tokens.
 
-Our approach: don't ask the LLM to do what a free API can do.
-
----
-
-# Split the work
-
-| Task | Who does it | Cost |
-|---|---|---|
-| Activity summary (40–60 words) | Vision LLM | ~$0.001 |
-| Raw text extraction | On-device OCR | Free |
-
-The LLM handles *understanding*. OCR handles *raw recall*.
-
----
-
-# The architecture
-
-```
-Screenshot
-    ├── → Vision LLM → 50-word summary → vector DB
-    │                                     (semantic search)
-    └── → Native OCR → raw text → SQLite
-                                  (exact recall, on-demand)
-```
-
-At query time, we search summaries first (fast, cheap), then pull OCR text on demand.
-
----
-
-# The point
-
-Optimize where the cost actually is.
-
-Video gives you cheap, dense input. Short summaries keep output costs down. Free local OCR covers the rest.
-
----
-
-# Part 2: MCP tool design
+## Part 2: Making the data useful
 
 ---
 
