@@ -21,11 +21,11 @@ Everything runs locally - besides the vision model where you can point to any en
 2. Making the extracted data useful for the user
 
 Other challenges which I won't focus on but happy to discuss in person
-3. Capturing activity costs CPU (but users like their all day battery life)
-4. Data privacy guarantees
-5. Cross platform distribution
-6. App integrations
-7. Closing the loop for coding agents (without verification, it produces slop usually, providing verification criteria is tougher for electron apps than for most SW)
+- Capturing activity costs CPU (but users like their all day battery life)
+- Data privacy guarantees
+- Cross platform distribution
+- App integrations
+- Closing the loop for coding agents (without verification, it produces slop usually, providing verification criteria is tougher for electron apps than for most SW)
 
 ---
 
