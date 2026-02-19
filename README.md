@@ -1,9 +1,3 @@
-# Your Screen History as an MCP Server
-
-### Filip Kubis
-
----
-
 # What if your AI assistant remembered everything you did on your computer?
 
 ---
