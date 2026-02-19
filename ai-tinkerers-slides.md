@@ -1,117 +1,79 @@
-# What if your AI assistant remembered everything you did on your computer?
+# What if your AI assistants remembered everything you did on your computer?
 
----
 
-# Let me show you.
-
-> *"What have I been working on in the last few hours?"*
-
-Live demo — Claude Desktop + MemoryLane MCP
-
----
-
-# What just happened?
+## How does it work?
 
 ```
-Periodic screenshots (1/sec)
-    → Vision model extraction
-        → Local vector storage (SQLite + LanceDB)
+Periodic screenshots (smart activity based capture)
+    → Vision model extracts information about your activity
+        → Local storage with vector embeddings (SQLite)
             → MCP server
-                → Claude answers your question
+                → Claude can access information about your activity
 ```
 
-Everything runs locally. Nothing leaves your machine.
+Everything runs locally - besides the vision model where you can point to any endponit (including local private model).
 
 ---
 
-# The hard parts of building this
+## The hard parts of building this
 
-1. Token efficiency — getting useful context without burning money
-2. MCP tool design — making the tools actually pleasant for an LLM to use
+1. Efficient use of tokens
+2. Making the extracted data useful for the user
 
----
-
-# Part 1: Token efficiency
-
----
-
-# The problem
-
-We're processing hundreds of screenshots per hour through vision models.
-
-Two things drive cost:
-- **Input tokens** — how you encode what happened on screen
-- **Output tokens** — what you ask the model to produce
+Other challenges which I won't focus on but happy to discuss in person
+- Capturing activity costs CPU (but users like their all day battery life)
+- Data privacy guarantees
+- Cross platform distribution
+- App integrations
+- Closing the loop for coding agents (without verification, it produces slop usually, providing verification criteria is tougher for electron apps than for most SW)
 
 ---
 
-# Input tokens: video turns out to be the best encoding
+## Part 1: Token efficiency
 
-| | 10 individual images | 10s video (1fps) |
-|---|---|---|
-| Tokens | ~2,580 | ~2,580 |
-| Payload | ~500KB–1MB | ~100–300KB |
-| Temporal context | none | model sees transitions |
+### The goal
 
-Same token cost. Smaller payload. And the model actually understands what's happening over time.
+Extract meaningful information about the users activity.
 
----
+### The problem
 
-# Not all models are equal
+We're processing hundreds of screenshots per hour through vision models - this can get expensive.
 
-| Model | Cost / 5 min video |
-|---|---|
-| Gemini 2.5 Flash | ~$0.001 |
-| Gemini 3 Flash | ~$0.0008 (variable seq length) |
-| GPT-4.1 | ~$0.46 |
-| GPT-4.1 mini | ~$0.002 |
+We want to provide as **much information** as possible in as **few input tokens** as possible.
 
-Gemini's native video tokenization makes it about 400x cheaper than GPT-4.1 for this use case.
+Output tokens are quite expensive.
 
 ---
 
-# Output tokens: this is where it gets expensive
+### Lessons with Input tokens:
 
-Output tokens cost 4–8x more than input tokens.
+| Model | Tokens / screenshot | Tokens / sec of video | Cost / 1M input tokens | Cost / 1h video input |
+|---|---|---|---|---|
+| Gemini 2.5 Flash Lite | 3,360 | ~258 | $0.10 | ~$0.09 |
+| Gemini 2.5 Flash | 3,360 | ~258 | $0.30 | ~$0.28 |
+| Gemini 3 Flash Preview | 1,072 | ~64 | $0.50 | ~$0.12 |
+| Gemini 3 Pro Preview | 1,072 | ~64 | $2.00 | ~$0.46 |
+| Mistral Small 3.2 24B | 2,025 | N/A | $0.10 | N/A |
 
-Our approach: don't ask the LLM to do what a free API can do.
-
----
-
-# Split the work
-
-| Task | Who does it | Cost |
-|---|---|---|
-| Activity summary (40–60 words) | Vision LLM | ~$0.001 |
-| Raw text extraction | On-device OCR | Free |
-
-The LLM handles *understanding*. OCR handles *raw recall*.
+Understand your models' tokenizers.
+Video is incredibly token-efficient representation of "activity" (LLMs usualy sample 1FPS and understand temporal dependencies incredibly well).
 
 ---
 
-# The architecture
+### Lessons with Output tokens:
 
-```
-Screenshot
-    ├── → Vision LLM → 50-word summary → vector DB
-    │                                     (semantic search)
-    └── → Native OCR → raw text → SQLite
-                                  (exact recall, on-demand)
-```
+Usually cost 3–8x more than input tokens.
 
-At query time, we search summaries first (fast, cheap), then pull OCR text on demand.
+Our approach: don't ask the LLM to do what a free API can do. The LLM handles *understanding*. OCR handles *raw recall*.
 
----
+**High Level:**
+LLMs output activity summary - the narrative of what happened at ~$0.0001
 
-# The point
+**Detail:**
+Native OCR extracts text which can be used for perfect recall of the LLM.
 
-Optimize where the cost actually is.
 
-Video gives you cheap, dense input. Short summaries keep output costs down. Free local OCR covers the rest.
-
----
-
-# Part 2: MCP tool design
+## Part 2: Making the data useful
 
 ---
 
