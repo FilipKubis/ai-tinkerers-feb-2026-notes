@@ -104,6 +104,11 @@ Context is not valuable if not used.
 
 Providing skills that help guide the LLM to use the tools correctly helps the user gain value from the app.
 
+**Examples:**
+- context summarization from recent activity
+- finding topics of interest (use it to automate my news ingestion)
+- analyzing how you work - looking for improvement opportunities
+- time reports
 
 ### Feel free to contribute - try it out
 
