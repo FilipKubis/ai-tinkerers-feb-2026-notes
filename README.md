@@ -79,13 +79,8 @@ Native OCR extracts text which can be used for perfect recall of the LLM.
 
 ## Part 2: Making the data useful
 
----
 
-# How do you make screen context useful to an LLM?
-
----
-
-# Three tools, not one
+### Providing different levels of detail
 
 ```typescript
 search_context(query, startTime?, endTime?, limit?)
@@ -101,59 +96,22 @@ get_activity_details(ids[])
 // "show me the exact error message"
 ```
 
----
+**Good tool docs** prevent the LLM from making wrong conclusions (for example based on the OCR data).
 
-# Why three?
+### Skills 
 
-LLMs are bad at constructing complex queries.
+Context is not valuable if not used. 
 
-But they're good at picking the right tool for what you're asking.
+Providing skills that help guide the LLM to use the tools correctly helps the user gain value from the app.
 
-```
-"find my work on auth module"  →  search_context
-"what did I do today?"         →  browse_timeline
-"what exactly did it say?"     →  get_activity_details
-```
 
-Design tools around how LLMs think, not how your database works.
-
----
-
-# Live demo
-
-> *"When did I last work on the notarization pipeline?"*
-
-Watch the MCP tool calls in Claude Desktop.
-
----
-
-# Things we learned building MCP tools
-
-**Tool descriptions are basically prompts** — they matter as much as the implementation behind them.
-
-**Summaries first, details on demand** — keeps responses fast and cheap.
-
-**Add guardrails** — we use anti-overreach rules to prevent over-fetching.
-
-**The happy path should be one tool call** — not three.
-
----
-
-# The point
-
-MCP tool design is really prompt engineering.
-
-Name your tools clearly. Split by intent, not by data model. Make the common case a single call.
-
----
-
-# It's open source — scan to star
+### Feel free to contribute - try it out
 
 <img src="memorylane-repo-qr.png" alt="QR Code" width="200">
 
 **[github.com/deusXmachina-dev/memorylane](https://github.com/deusXmachina-dev/memorylane)**
 
-Electron · TypeScript · MCP · SQLite · LanceDB
+Electron · TypeScript · MCP · SQLite
 
 Works with Claude Desktop, Cursor, and Claude Code today.
 
@@ -164,4 +122,4 @@ Works with Claude Desktop, Cursor, and Claude Code today.
 🐙 [github.com/FilipKubis](https://github.com/FilipKubis)
 🔗 [linkedin.com/in/filip-kubis](https://linkedin.com/in/filip-kubis)
 
-Come chat if you're building MCP tools or local-first AI.
+Please come chat if the context problem is interesting for you.
