@@ -55,6 +55,8 @@ Output tokens are quite expensive.
 | Gemini 3 Pro Preview | 1,072 | 1,110 | ~64 | $2.00 | ~$0.46 |
 | Mistral Small 3.2 24B | 2,025 | 1,633 | N/A | $0.10 | N/A |
 
+*Large image: 3024x1964, small image: 1698x894.*
+
 Understand your models' tokenizers.
 Video is incredibly token-efficient representation of "activity" (LLMs usualy sample 1FPS and understand temporal dependencies incredibly well).
 
