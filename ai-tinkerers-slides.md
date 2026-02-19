@@ -195,7 +195,7 @@ Works with Claude Desktop, Cursor, and Claude Code today.
 
 # Let's connect
 
-[github.com/FilipKubis](https://github.com/FilipKubis)
-[linkedin.com/in/filip-kubis](https://linkedin.com/in/filip-kubis)
+🐙 [github.com/FilipKubis](https://github.com/FilipKubis)
+🔗 [linkedin.com/in/filip-kubis](https://linkedin.com/in/filip-kubis)
 
 Come chat if you're building MCP tools or local-first AI.
